@@ -1,0 +1,432 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  annotations:
+    kubemacpool.io/transaction-timestamp: '2024-04-30T06:25:47.713124874Z'
+    kubevirt.io/latest-observed-api-version: v1
+    kubevirt.io/storage-observed-api-version: v1alpha3
+    vm.kubevirt.io/validations: |
+      [
+        {
+          "name": "minimal-required-memory",
+          "path": "jsonpath::.spec.domain.resources.requests.memory",
+          "rule": "integer",
+          "message": "This VM requires more memory.",
+          "min": 1610612736
+        }
+      ]
+  resourceVersion: '477933'
+  name: rhel9-001
+  uid: ffa78663-0a4c-4ba7-83e4-21852d2fd550
+  creationTimestamp: '2024-04-30T06:25:47Z'
+  generation: 1
+  managedFields:
+    - apiVersion: kubevirt.io/v1alpha3
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            'f:kubevirt.io/latest-observed-api-version': {}
+            'f:kubevirt.io/storage-observed-api-version': {}
+      manager: Go-http-client
+      operation: Update
+      time: '2024-04-30T06:25:46Z'
+    - apiVersion: kubevirt.io/v1alpha3
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:status':
+          .: {}
+          'f:conditions': {}
+          'f:printableStatus': {}
+          'f:volumeSnapshotStatuses': {}
+      manager: Go-http-client
+      operation: Update
+      subresource: status
+      time: '2024-04-30T06:25:46Z'
+    - apiVersion: kubevirt.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:vm.kubevirt.io/validations': {}
+          'f:labels':
+            .: {}
+            'f:app': {}
+            'f:vm.kubevirt.io/template': {}
+            'f:vm.kubevirt.io/template.namespace': {}
+            'f:vm.kubevirt.io/template.revision': {}
+            'f:vm.kubevirt.io/template.version': {}
+        'f:spec':
+          .: {}
+          'f:dataVolumeTemplates': {}
+          'f:running': {}
+          'f:template':
+            .: {}
+            'f:metadata':
+              .: {}
+              'f:annotations':
+                .: {}
+                'f:vm.kubevirt.io/flavor': {}
+                'f:vm.kubevirt.io/os': {}
+                'f:vm.kubevirt.io/workload': {}
+              'f:labels':
+                .: {}
+                'f:kubevirt.io/domain': {}
+                'f:kubevirt.io/size': {}
+            'f:spec':
+              .: {}
+              'f:domain':
+                .: {}
+                'f:cpu':
+                  .: {}
+                  'f:cores': {}
+                  'f:sockets': {}
+                  'f:threads': {}
+                'f:devices':
+                  .: {}
+                  'f:disks': {}
+                  'f:interfaces': {}
+                  'f:networkInterfaceMultiqueue': {}
+                  'f:rng': {}
+                'f:features':
+                  .: {}
+                  'f:smm':
+                    .: {}
+                    'f:enabled': {}
+                'f:firmware':
+                  .: {}
+                  'f:bootloader':
+                    .: {}
+                    'f:efi': {}
+                'f:machine':
+                  .: {}
+                  'f:type': {}
+                'f:resources':
+                  .: {}
+                  'f:requests':
+                    .: {}
+                    'f:memory': {}
+              'f:evictionStrategy': {}
+              'f:networks': {}
+              'f:terminationGracePeriodSeconds': {}
+              'f:volumes': {}
+      manager: Mozilla
+      operation: Update
+      time: '2024-04-30T06:25:47Z'
+  namespace: vm-test
+  labels:
+    app: rhel9-00s5wm7hxandvxgw
+    vm.kubevirt.io/template: rhel9-server-small
+    vm.kubevirt.io/template.namespace: openshift
+    vm.kubevirt.io/template.revision: '1'
+    vm.kubevirt.io/template.version: v0.24.2
+spec:
+  dataVolumeTemplates:
+    - apiVersion: cdi.kubevirt.io/v1beta1
+      kind: DataVolume
+      metadata:
+        creationTimestamp: null
+        name: rhel9-00s5wm7hxandvxgw
+      spec:
+        sourceRef:
+          kind: DataSource
+          name: rhel9
+          namespace: openshift-virtualization-os-images
+        storage:
+          resources:
+            requests:
+              storage: 30Gi
+  running: true
+  template:
+    metadata:
+      annotations:
+        vm.kubevirt.io/flavor: small
+        vm.kubevirt.io/os: rhel9
+        vm.kubevirt.io/workload: server
+      creationTimestamp: null
+      labels:
+        kubevirt.io/domain: rhel9-00s5wm7hxandvxgw
+        kubevirt.io/size: small
+    spec:
+      domain:
+        cpu:
+          cores: 1
+          sockets: 1
+          threads: 1
+        devices:
+          disks:
+            - disk:
+                bus: virtio
+              name: rootdisk
+            - disk:
+                bus: virtio
+              name: cloudinitdisk
+          interfaces:
+            - macAddress: '02:5b:e6:00:00:02'
+              masquerade: {}
+              model: virtio
+              name: default
+          networkInterfaceMultiqueue: true
+          rng: {}
+        features:
+          acpi: {}
+          smm:
+            enabled: true
+        firmware:
+          bootloader:
+            efi: {}
+        machine:
+          type: pc-q35-rhel8.6.0
+        resources:
+          requests:
+            memory: 2Gi
+      evictionStrategy: LiveMigrate
+      networks:
+        - name: default
+          pod: {}
+      terminationGracePeriodSeconds: 180
+      volumes:
+        - dataVolume:
+            name: rhel9-00s5wm7hxandvxgw
+          name: rootdisk
+        - cloudInitNoCloud:
+            userData: |-
+              #cloud-config
+              user: cloud-user
+              password: 0vnk-5ft5-8i82
+              chpasswd: { expire: False }
+          name: cloudinitdisk
+status:
+  conditions:
+    - lastProbeTime: '2024-04-30T06:25:47Z'
+      lastTransitionTime: '2024-04-30T06:25:47Z'
+      message: VMI does not exist
+      reason: VMINotExists
+      status: 'False'
+      type: Ready
+  printableStatus: Stopped
+  volumeSnapshotStatuses:
+    - enabled: false
+      name: rootdisk
+      reason: PVC not found
+    - enabled: false
+      name: cloudinitdisk
+      reason: 'Snapshot is not supported for this volumeSource type [cloudinitdisk]'
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  annotations:
+    kubemacpool.io/transaction-timestamp: '2024-04-30T06:25:47.713124874Z'
+    kubevirt.io/latest-observed-api-version: v1
+    kubevirt.io/storage-observed-api-version: v1alpha3
+    vm.kubevirt.io/validations: |
+      [
+        {
+          "name": "minimal-required-memory",
+          "path": "jsonpath::.spec.domain.resources.requests.memory",
+          "rule": "integer",
+          "message": "This VM requires more memory.",
+          "min": 1610612736
+        }
+      ]
+  resourceVersion: '477933'
+  name: rhel9-002
+  uid: ffa78663-0a4c-4ba7-83e4-21852d2fd550
+  creationTimestamp: '2024-04-30T06:25:47Z'
+  generation: 1
+  managedFields:
+    - apiVersion: kubevirt.io/v1alpha3
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            'f:kubevirt.io/latest-observed-api-version': {}
+            'f:kubevirt.io/storage-observed-api-version': {}
+      manager: Go-http-client
+      operation: Update
+      time: '2024-04-30T06:25:46Z'
+    - apiVersion: kubevirt.io/v1alpha3
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:status':
+          .: {}
+          'f:conditions': {}
+          'f:printableStatus': {}
+          'f:volumeSnapshotStatuses': {}
+      manager: Go-http-client
+      operation: Update
+      subresource: status
+      time: '2024-04-30T06:25:46Z'
+    - apiVersion: kubevirt.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:vm.kubevirt.io/validations': {}
+          'f:labels':
+            .: {}
+            'f:app': {}
+            'f:vm.kubevirt.io/template': {}
+            'f:vm.kubevirt.io/template.namespace': {}
+            'f:vm.kubevirt.io/template.revision': {}
+            'f:vm.kubevirt.io/template.version': {}
+        'f:spec':
+          .: {}
+          'f:dataVolumeTemplates': {}
+          'f:running': {}
+          'f:template':
+            .: {}
+            'f:metadata':
+              .: {}
+              'f:annotations':
+                .: {}
+                'f:vm.kubevirt.io/flavor': {}
+                'f:vm.kubevirt.io/os': {}
+                'f:vm.kubevirt.io/workload': {}
+              'f:labels':
+                .: {}
+                'f:kubevirt.io/domain': {}
+                'f:kubevirt.io/size': {}
+            'f:spec':
+              .: {}
+              'f:domain':
+                .: {}
+                'f:cpu':
+                  .: {}
+                  'f:cores': {}
+                  'f:sockets': {}
+                  'f:threads': {}
+                'f:devices':
+                  .: {}
+                  'f:disks': {}
+                  'f:interfaces': {}
+                  'f:networkInterfaceMultiqueue': {}
+                  'f:rng': {}
+                'f:features':
+                  .: {}
+                  'f:smm':
+                    .: {}
+                    'f:enabled': {}
+                'f:firmware':
+                  .: {}
+                  'f:bootloader':
+                    .: {}
+                    'f:efi': {}
+                'f:machine':
+                  .: {}
+                  'f:type': {}
+                'f:resources':
+                  .: {}
+                  'f:requests':
+                    .: {}
+                    'f:memory': {}
+              'f:evictionStrategy': {}
+              'f:networks': {}
+              'f:terminationGracePeriodSeconds': {}
+              'f:volumes': {}
+      manager: Mozilla
+      operation: Update
+      time: '2024-04-30T06:25:47Z'
+  namespace: vm-test
+  labels:
+    app: rhel9-00s5wm7hxandvxgw
+    vm.kubevirt.io/template: rhel9-server-small
+    vm.kubevirt.io/template.namespace: openshift
+    vm.kubevirt.io/template.revision: '1'
+    vm.kubevirt.io/template.version: v0.24.2
+spec:
+  dataVolumeTemplates:
+    - apiVersion: cdi.kubevirt.io/v1beta1
+      kind: DataVolume
+      metadata:
+        creationTimestamp: null
+        name: rhel9-00s5wm7hxandvxgw
+      spec:
+        sourceRef:
+          kind: DataSource
+          name: rhel9
+          namespace: openshift-virtualization-os-images
+        storage:
+          resources:
+            requests:
+              storage: 30Gi
+  running: true
+  template:
+    metadata:
+      annotations:
+        vm.kubevirt.io/flavor: small
+        vm.kubevirt.io/os: rhel9
+        vm.kubevirt.io/workload: server
+      creationTimestamp: null
+      labels:
+        kubevirt.io/domain: rhel9-00s5wm7hxandvxgw
+        kubevirt.io/size: small
+    spec:
+      domain:
+        cpu:
+          cores: 1
+          sockets: 1
+          threads: 1
+        devices:
+          disks:
+            - disk:
+                bus: virtio
+              name: rootdisk
+            - disk:
+                bus: virtio
+              name: cloudinitdisk
+          interfaces:
+            - macAddress: '02:5b:e6:00:00:02'
+              masquerade: {}
+              model: virtio
+              name: default
+          networkInterfaceMultiqueue: true
+          rng: {}
+        features:
+          acpi: {}
+          smm:
+            enabled: true
+        firmware:
+          bootloader:
+            efi: {}
+        machine:
+          type: pc-q35-rhel8.6.0
+        resources:
+          requests:
+            memory: 2Gi
+      evictionStrategy: LiveMigrate
+      networks:
+        - name: default
+          pod: {}
+      terminationGracePeriodSeconds: 180
+      volumes:
+        - dataVolume:
+            name: rhel9-00s5wm7hxandvxgw
+          name: rootdisk
+        - cloudInitNoCloud:
+            userData: |-
+              #cloud-config
+              user: cloud-user
+              password: 0vnk-5ft5-8i82
+              chpasswd: { expire: False }
+          name: cloudinitdisk
+status:
+  conditions:
+    - lastProbeTime: '2024-04-30T06:25:47Z'
+      lastTransitionTime: '2024-04-30T06:25:47Z'
+      message: VMI does not exist
+      reason: VMINotExists
+      status: 'False'
+      type: Ready
+  printableStatus: Stopped
+  volumeSnapshotStatuses:
+    - enabled: false
+      name: rootdisk
+      reason: PVC not found
+    - enabled: false
+      name: cloudinitdisk
+      reason: 'Snapshot is not supported for this volumeSource type [cloudinitdisk]'
+
